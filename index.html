@@ -103,6 +103,7 @@
       }
 
       .workspace {
+        position: relative;
         display: grid;
         gap: 18px;
         min-height: calc(100vh - 56px);
@@ -164,6 +165,37 @@
         grid-template-columns: minmax(0, 0.88fr) minmax(360px, 1.12fr);
         gap: 18px;
         align-items: start;
+      }
+
+      .cat-widget {
+        all: unset;
+        position: absolute;
+        top: 34px;
+        right: clamp(150px, 18vw, 240px);
+        z-index: 2;
+        width: clamp(130px, 16vw, 230px);
+        aspect-ratio: 760 / 411;
+        cursor: pointer;
+        filter: drop-shadow(0 16px 28px rgba(255, 255, 255, 0.08));
+        transition: transform 160ms ease, filter 160ms ease;
+      }
+
+      .cat-widget:hover,
+      .cat-widget:focus-visible {
+        filter: drop-shadow(0 18px 32px rgba(255, 255, 255, 0.14));
+        transform: translateY(-2px) rotate(-1deg);
+      }
+
+      .cat-widget:focus-visible {
+        outline: 2px solid var(--text);
+        outline-offset: 8px;
+        border-radius: 18px;
+      }
+
+      .cat-widget img {
+        display: block;
+        width: 100%;
+        height: auto;
       }
 
       .how-to {
@@ -393,6 +425,10 @@
         .field-grid .wide {
           grid-column: auto;
         }
+
+        .cat-widget {
+          display: none;
+        }
       }
 
       @media (max-width: 680px) {
@@ -428,6 +464,11 @@
             <button class="ghost-button" id="clearButton" type="button">Clear</button>
           </div>
         </header>
+
+        <button class="cat-widget" id="catWidget" type="button" aria-label="Play cat sound">
+          <img src="assets/cat-cutout.png" alt="">
+        </button>
+        <audio id="catSound" src="assets/angry4.mp3" preload="auto"></audio>
 
         <section class="how-to" aria-labelledby="how-to-title">
           <h2 id="how-to-title">How to Use</h2>
@@ -561,6 +602,8 @@
       const parsePasteButton = document.getElementById("parsePasteButton");
       const sampleButton = document.getElementById("sampleButton");
       const clearButton = document.getElementById("clearButton");
+      const catWidget = document.getElementById("catWidget");
+      const catSound = document.getElementById("catSound");
       const statusBox = document.getElementById("status");
       const output = document.getElementById("output");
       const lineCount = document.getElementById("lineCount");
@@ -602,6 +645,11 @@
         statusBox.textContent = message;
         statusBox.classList.toggle("error", tone === "error");
         statusBox.classList.toggle("warning", tone === "warning");
+      }
+
+      function playCatSound() {
+        catSound.currentTime = 0;
+        catSound.play().catch(() => {});
       }
 
       function decodeTextBuffer(buffer) {
@@ -1223,6 +1271,8 @@
       copyOutputButton.addEventListener("click", () => copyText(output.value, "Output copied."));
       copyInputButton.addEventListener("click", () => copyText(rawInput.value, "Input copied."));
       clearButton.addEventListener("click", clearAll);
+      catWidget.addEventListener("pointerenter", playCatSound);
+      catWidget.addEventListener("focus", playCatSound);
 
       [timeColumn, commentColumn, formatMode, sortMode, fallbackColumns].forEach((control) => {
         control.addEventListener("change", () => {
