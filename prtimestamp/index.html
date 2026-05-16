@@ -12,18 +12,18 @@
     <meta property="og:type" content="website">
     <style>
       :root {
-        color-scheme: light;
-        --bg: #f1efed;
-        --panel: #f1efed;
-        --panel-2: #b6c8c7;
-        --panel-3: #fff4ce;
-        --text: #001519;
-        --muted: #808368;
-        --line: rgba(0, 21, 25, 0.18);
-        --accent: #808368;
-        --accent-2: #fff4ce;
-        --danger: #001519;
-        --button-text: #f1efed;
+        color-scheme: dark;
+        --bg: #000000;
+        --panel: #000000;
+        --panel-2: #050505;
+        --panel-3: #0a0a0a;
+        --text: #ffffff;
+        --muted: #b8b8b8;
+        --line: #6f6f6f;
+        --accent: #ffffff;
+        --accent-2: #1e90ff;
+        --danger: #ffffff;
+        --button-text: #ffffff;
       }
 
       * {
@@ -33,7 +33,7 @@
       body {
         margin: 0;
         min-height: 100vh;
-        background: linear-gradient(135deg, #f1efed 0%, #b6c8c7 100%);
+        background: var(--bg);
         color: var(--text);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
@@ -47,9 +47,9 @@
 
       button {
         min-height: 40px;
-        border: 0;
+        border: 1px solid var(--line);
         border-radius: 6px;
-        background: var(--text);
+        background: var(--bg);
         color: var(--button-text);
         font-weight: 800;
         padding: 0 14px;
@@ -71,7 +71,7 @@
         width: 100%;
         border: 1px solid var(--line);
         border-radius: 6px;
-        background: rgba(241, 239, 237, 0.72);
+        background: var(--panel);
         color: var(--text);
         padding: 10px 11px;
       }
@@ -92,7 +92,7 @@
       select:focus,
       textarea:focus,
       button:focus-visible {
-        outline: 2px solid rgba(128, 131, 104, 0.72);
+        outline: 2px solid var(--accent-2);
         outline-offset: 2px;
       }
 
@@ -106,9 +106,9 @@
         display: grid;
         gap: 18px;
         min-height: calc(100vh - 56px);
-        border: 1px solid rgba(0, 21, 25, 0.12);
+        border: 1px solid var(--line);
         border-radius: 8px;
-        background: rgba(241, 239, 237, 0.88);
+        background: var(--bg);
         padding: clamp(16px, 2.6vw, 28px);
       }
 
@@ -167,7 +167,7 @@
       }
 
       .how-to {
-        border: 1px solid rgba(128, 131, 104, 0.24);
+        border: 1px solid var(--line);
         border-radius: 8px;
         background: var(--panel-3);
         padding: 16px;
@@ -200,9 +200,9 @@
         gap: 7px;
         place-items: center;
         min-height: 150px;
-        border: 2px dashed rgba(0, 21, 25, 0.34);
+        border: 2px dashed var(--line);
         border-radius: 8px;
-        background: rgba(241, 239, 237, 0.54);
+        background: var(--panel);
         text-align: center;
         cursor: pointer;
         transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
@@ -210,8 +210,8 @@
 
       .drop-zone:hover,
       .drop-zone.is-dragging {
-        border-color: var(--accent);
-        background: var(--accent-2);
+        border-color: var(--accent-2);
+        background: var(--panel-3);
       }
 
       .drop-zone.is-dragging {
@@ -269,9 +269,9 @@
 
       .metric {
         min-height: 76px;
-        border: 1px solid rgba(0, 21, 25, 0.12);
+        border: 1px solid var(--line);
         border-radius: 8px;
-        background: rgba(255, 244, 206, 0.72);
+        background: var(--panel-3);
         padding: 12px;
       }
 
@@ -292,10 +292,10 @@
         align-items: center;
         justify-content: center;
         min-height: 52px;
-        border: 1px solid var(--text);
+        border: 1px solid var(--line);
         border-radius: 8px;
-        background: var(--text);
-        color: var(--bg);
+        background: var(--bg);
+        color: var(--text);
         font-size: clamp(1.05rem, 2.2vw, 1.45rem);
         font-weight: 700;
         padding: 12px 18px;
@@ -304,8 +304,8 @@
       }
 
       .support-link:hover {
-        border-color: var(--accent);
-        background: var(--accent);
+        border-color: var(--accent-2);
+        background: var(--panel-3);
         text-decoration: underline;
       }
 
@@ -327,7 +327,7 @@
       }
 
       .status.warning {
-        color: var(--accent-2);
+        color: var(--text);
         font-weight: 800;
       }
 
@@ -353,7 +353,7 @@
       th,
       td {
         max-width: 260px;
-        border-bottom: 1px solid rgba(159, 176, 199, 0.14);
+        border-bottom: 1px solid var(--line);
         padding: 9px 10px;
         text-align: left;
         vertical-align: top;
@@ -366,8 +366,8 @@
         position: sticky;
         top: 0;
         z-index: 1;
-        background: var(--accent);
-        color: var(--bg);
+        background: var(--panel-3);
+        color: var(--text);
       }
 
       .output-panel {
@@ -382,6 +382,22 @@
       .hint {
         color: var(--muted);
         font-size: 0.84rem;
+      }
+
+      .cursor-lens {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent-2);
+        box-shadow: 0 0 14px rgba(30, 144, 255, 0.88);
+        opacity: 0;
+        pointer-events: none;
+        transform: translate3d(-50%, -50%, 0);
+        transition: opacity 120ms ease;
       }
 
       @media (max-width: 920px) {
@@ -416,6 +432,7 @@
     </style>
   </head>
   <body>
+    <div class="cursor-lens" id="cursorLens" aria-hidden="true"></div>
     <main class="app-shell">
       <section class="workspace" aria-labelledby="app-title">
         <header class="topbar">
@@ -569,6 +586,7 @@
       const skippedCount = document.getElementById("skippedCount");
       const delimiterLabel = document.getElementById("delimiterLabel");
       const previewTable = document.getElementById("previewTable");
+      const cursorLens = document.getElementById("cursorLens");
 
       const timeCandidates = [
         "timecode",
@@ -1223,6 +1241,15 @@
       copyOutputButton.addEventListener("click", () => copyText(output.value, "Output copied."));
       copyInputButton.addEventListener("click", () => copyText(rawInput.value, "Input copied."));
       clearButton.addEventListener("click", clearAll);
+
+      document.addEventListener("pointermove", (event) => {
+        cursorLens.style.opacity = "1";
+        cursorLens.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
+      });
+
+      document.addEventListener("pointerleave", () => {
+        cursorLens.style.opacity = "0";
+      });
 
       [timeColumn, commentColumn, formatMode, sortMode, fallbackColumns].forEach((control) => {
         control.addEventListener("change", () => {
