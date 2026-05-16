@@ -389,15 +389,47 @@
         top: 0;
         left: 0;
         z-index: 9999;
-        width: 10px;
-        height: 10px;
+        width: 112px;
+        height: 112px;
         border-radius: 50%;
-        background: var(--accent-2);
-        box-shadow: 0 0 14px rgba(30, 144, 255, 0.88);
+        border: 1px solid rgba(153, 210, 255, 0.72);
+        background:
+          radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.56), transparent 16%),
+          radial-gradient(circle at 70% 76%, rgba(30, 144, 255, 0.22), transparent 34%),
+          rgba(30, 144, 255, 0.12);
+        box-shadow:
+          inset 0 0 18px rgba(255, 255, 255, 0.18),
+          inset 0 -18px 28px rgba(30, 144, 255, 0.14),
+          0 10px 34px rgba(30, 144, 255, 0.34);
+        overflow: hidden;
         opacity: 0;
         pointer-events: none;
         transform: translate3d(-50%, -50%, 0);
         transition: opacity 120ms ease;
+      }
+
+      .cursor-lens::after {
+        content: "";
+        position: absolute;
+        inset: 7px 14px auto;
+        height: 34px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), transparent);
+        opacity: 0.8;
+      }
+
+      .cursor-lens-content {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        min-height: 100vh;
+        transform-origin: top left;
+        filter: saturate(1.45) brightness(1.12);
+      }
+
+      .cursor-lens-content .cursor-lens {
+        display: none;
       }
 
       @media (max-width: 920px) {
@@ -587,6 +619,9 @@
       const delimiterLabel = document.getElementById("delimiterLabel");
       const previewTable = document.getElementById("previewTable");
       const cursorLens = document.getElementById("cursorLens");
+      const lensContent = document.createElement("div");
+      const lensScale = 1.08;
+      const lensRadius = 56;
 
       const timeCandidates = [
         "timecode",
@@ -620,6 +655,14 @@
         statusBox.textContent = message;
         statusBox.classList.toggle("error", tone === "error");
         statusBox.classList.toggle("warning", tone === "warning");
+      }
+
+      function syncLensContent() {
+        const clone = document.querySelector(".app-shell").cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        clone.querySelectorAll("[id]").forEach((item) => item.removeAttribute("id"));
+        lensContent.className = "cursor-lens-content";
+        lensContent.replaceChildren(clone);
       }
 
       function decodeTextBuffer(buffer) {
@@ -1245,6 +1288,7 @@
       document.addEventListener("pointermove", (event) => {
         cursorLens.style.opacity = "1";
         cursorLens.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
+        lensContent.style.transform = `translate3d(${lensRadius - event.clientX * lensScale}px, ${lensRadius - event.clientY * lensScale}px, 0) scale(${lensScale})`;
       });
 
       document.addEventListener("pointerleave", () => {
@@ -1286,6 +1330,14 @@
         }
       });
 
+      cursorLens.append(lensContent);
+      syncLensContent();
+      new MutationObserver(syncLensContent).observe(document.querySelector(".app-shell"), {
+        attributes: true,
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
       renderPreview();
     </script>
   </body>
